@@ -1,0 +1,24 @@
+------------------
+	    1	_Dmain
+_D10dmdprofile15tooSlowFunctionFZv	1	2667168930	2667168562
+	    1	_D4core4time25__T3durVAyaa5_6d73656373Z3durFNaNbNiNflZS4core4time8Duration
+------------------
+	    1	_D10dmdprofile15tooSlowFunctionFZv
+_D4core4time25__T3durVAyaa5_6d73656373Z3durFNaNbNiNflZS4core4time8Duration	1	368	350
+	    1	_D4core4time48__T7convertVAyaa5_6d73656373VAyaa6_686e73656373Z7convertFNaNbNiNflZl
+------------------
+	    1	_D4core4time25__T3durVAyaa5_6d73656373Z3durFNaNbNiNflZS4core4time8Duration
+_D4core4time48__T7convertVAyaa5_6d73656373VAyaa6_686e73656373Z7convertFNaNbNiNflZl	1	18	18
+------------------
+_Dmain	0	2667169048	118
+	    1	_D10dmdprofile15tooSlowFunctionFZv
+
+======== Timer Is 3579545 Ticks/Sec, Times are in Microsecs ========
+
+  Num          Tree        Func        Per
+  Calls        Time        Time        Call
+
+      1   745113954   745113851   745113851     void dmdprofile.tooSlowFunction()
+      1         102          97          97     pure nothrow @nogc @safe core.time.Duration core.time.dur!("msecs").dur(long)
+      1   745113987          32          32     _Dmain
+      1           5           5           5     pure nothrow @nogc @safe long core.time.convert!("msecs", "hnsecs").convert(long)

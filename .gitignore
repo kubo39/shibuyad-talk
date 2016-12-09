@@ -1,0 +1,6 @@
+*~
+*.o
+dmdprofile
+*.data
+*.old
+callgrind.out*
