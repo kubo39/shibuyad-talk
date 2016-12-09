@@ -57,4 +57,23 @@ $ cat trace.log
 
 ## Memory Profiling
 
+### generic primitive
 
+- mallinfo(3) (Linux/Glibc)
+- proc/[PID]/statm (Linux)
+
+```d
+extern(C) {
+    struct mallinfo_ {
+        ...
+    }
+    mallinfo_ mallinfo();
+}
+```
+
+### DUB Package
+
+- [resusage](http://code.dlang.org/packages/resusage)
+
+* process: `/proc/[PID]/stat`
+* system: `sysinfo(3)`
