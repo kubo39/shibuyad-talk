@@ -1,8 +1,20 @@
 # shibya.d 2
 
+---
+
 ## benchmark
 
+- benchmarkはエビデンス
+    - 提案がほんとに効果あるかとか
+    - パフォーマンスに影響があるorないの証明とか
+- ツールうんぬんよりもいろいろなパターンでとるのが大事
+
+---
+
 ### std.datetime.benchmark
+
+- std.datetimeにはbenchmark関数以外もあるけど、まあお好みで
+    - 表示が弱い(だめじゃんね…)
 
 ```d
     auto results = benchmark!(makeSlice, makeSliceOpt)(100);
@@ -15,7 +27,17 @@ $ shibuyad-talk% rdmd benchmark1.d
 */
 ```
 
+---
+
 ## CPU profiling
+
+- 推測するな、計測せよ
+    - どうやってボトルネックみつけるか
+    - 勘とか、知識とかまあ悪くはないけど
+        - 実は最適化してくれてるとかコードみただけでわかります？
+        - けっきょくボトルネックじゃないかもしれない
+
+---
 
 ### dmd -profile
 
@@ -28,7 +50,33 @@ $ dmd -g -profile dmdprofile.d
 $ cat trace.log
 ```
 
+- ここがいい: D言語のruntime側でhookしてるので余計な情報が入らない、使うの簡単
+- ここがだめ: D関係ないとこはとれない(runtimeをskipするとだめ)、とれるプラットフォームは限定的
+
+---
+
+### perf (1)
+
+- Performance Counter (`perf_event_open(2)`)
+    - msrレジスタが〜とか書こうと思ったけどめんどくさくなった
+- rdtscと比べると低消費電力モードの影響を受けない
+- 総instruction数、L1/L2キャッシュヒット率とかもわかる
+
+```console
+# perf record dmdprofile
+# perf report
+... # なんかでる
+```
+
+- ここがいい: 使うの簡単、かなりいろいろとれる
+- ここがだめ: 使えるのはLinuxのみ
+
+---
+
 ### valgrind
+
+- callgrindとかcachegrindとか
+- 多分perfと同じ感じ？実装読みきれなかった…
 
 ```console
 % valgrind --tool=callgrind ./dmdprofile
@@ -47,20 +95,59 @@ $ cat trace.log
 ... # なんかいっぱいでる
 ```
 
-### perf (Linux)
+- ここがいい: プラットフォームの差異は吸収、使うのも難しくはない
+- ここがだめ: ドキュメントがちょっとわかりにくいかも
 
-```console
-# perf record dmdprofile
-# perf report
-... # なんかでる
-```
+---
+
+### 他にもいろいろある
+
+- oproifle
+    - 昔は割り込み式だったけど今はperfと同じかんじに動く
+- Google CPU Profiler
+    - C/C++向けのSampling Profiler
+    - pprof(Go)とかstackprof(Ruby)とかに影響
+
+まあ長くなりすぎるので…
+
+---
 
 ## Memory Profiling
 
-### generic primitive
+---
 
-- mallinfo(3) (Linux/Glibc)
-- proc/[PID]/statm (Linux)
+### GC Configuration
+
+- 最近は実行時にGC向けのConfigを喰わせられるように
+
+```
+ $ ./gctuning "--DRT-gcopt=profile:2 minPoolSize:16"
+        Number of collections:  5
+        Total GC prep time:  0 milliseconds
+        Total mark time:  1 milliseconds
+        Total sweep time:  0 milliseconds
+        Total page recovery time:  0 milliseconds
+        Max Pause Time:  0 milliseconds
+        Grand total GC time:  1 milliseconds
+GC summary:  268 MB,    5 GC    1 ms, Pauses    1 ms <    0 ms
+```
+
+---
+
+### OS/libc
+
+- 生でさわることも簡単にできる
+    - mallinfo(3) (Linux/Glibc)
+    - proc/[PID]/statm (Linux)
+
+- 基本後述のresusage使うったほうがよい
+    - 事情もある
+    - shared libraryだとruntimeは邪魔
+
+---
+
+- 一応libcは楽に触れる
+    - Cとの連携の楽さ
 
 ```d
 extern(C) {
@@ -71,9 +158,34 @@ extern(C) {
 }
 ```
 
+---
+
 ### DUB Package
 
 - [resusage](http://code.dlang.org/packages/resusage)
+    - process: `/proc/[PID]/stat`
+    - system: `sysinfo(3)`
+- よほど事情がない限り自前で書く必要はない
 
-* process: `/proc/[PID]/stat`
-* system: `sysinfo(3)`
+---
+
+## performance
+
+* GC
+* memcpy(3)
+
+---
+
+### GC
+
+http://dlang.org/spec/garbage.html
+
+- Mark and Sweep / Stop The World
+- concurrentとかcopyingとかgenerationalとかない
+
+---
+
+### memcpy(3)
+
+- まあコピー減らすのは常套手段
+    - string連結とかしないでstd.array.appender使うとか
