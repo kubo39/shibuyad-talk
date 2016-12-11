@@ -58,7 +58,7 @@ $ cat trace.log
 
 ### perf (1)
 
-- Performance Counter (`CPU_CLK_UNHALTED`) + ftrace
+- Performance Counter (`CPU_CLK_UNHALTED`) + ftraceなsampling profiler
     - ftraceでカーネルの関数とかにもフック
     - msrレジスタが〜とか書こうと思ったけどめんどくさくなった
 - rdtscと比べると低消費電力モードの影響を受けない
@@ -109,10 +109,10 @@ $ cat trace.log
 
 - oproifle
     - 昔は割り込み式だったけど今はperfと同じかんじに動く
-    - 結果みるのがだるい…
 - Google CPU Profiler
     - C/C++向けのSampling Profiler
     - pprof(Go)とかstackprof(Ruby)とかに影響
+    - 本番環境でもprofilingできるのが嬉しい
 
 まあ長くなりすぎるので…
 
