@@ -146,7 +146,7 @@ GC summary:  268 MB,    5 GC    1 ms, Pauses    1 ms <    0 ms
 
 ---
 
-- 一応libcは楽に触れる
+- libcは楽に触れる
     - Cとの連携の楽さ
 
 ```d
@@ -163,9 +163,8 @@ extern(C) {
 ### DUB Package
 
 - [resusage](http://code.dlang.org/packages/resusage)
-    - process: `/proc/[PID]/stat`
-    - system: `sysinfo(3)`
-- よほど事情がない限り自前で書く必要はない
+    - わりとポータブル(Windows/Linux/FreeBSD)
+    - よほど事情がない限り自前で書く必要はない
 
 ---
 
