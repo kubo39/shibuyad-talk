@@ -77,6 +77,7 @@ $ cat trace.log
 
 - callgrindとかcachegrindとか
 - 多分perfと同じ感じ？実装読みきれなかった…
+- OSXでも動いてくれる
 
 ```console
 % valgrind --tool=callgrind ./dmdprofile
