@@ -15,6 +15,7 @@
 
 - std.datetimeにはbenchmark関数以外もあるけど、まあお好みで
     - 表示が弱い(だめじゃんね…)
+- なんでstd.datetime...?
 
 ```d
     auto results = benchmark!(makeSlice, makeSliceOpt)(100);
@@ -57,7 +58,8 @@ $ cat trace.log
 
 ### perf (1)
 
-- Performance Counter (`perf_event_open(2)`)
+- Performance Counter (`CPU_CLK_UNHALTED`) + ftrace
+    - ftraceでカーネルの関数とかにもフック
     - msrレジスタが〜とか書こうと思ったけどめんどくさくなった
 - rdtscと比べると低消費電力モードの影響を受けない
 - 総instruction数、L1/L2キャッシュヒット率とかもわかる
@@ -69,14 +71,15 @@ $ cat trace.log
 ```
 
 - ここがいい: 使うの簡単、かなりいろいろとれる
-- ここがだめ: 使えるのはLinuxのみ
+- ここがだめ: 使えるのはLinuxのみ、root権限が必要
+    - まあ*BSDならDTraceでしょ、という
 
 ---
 
 ### valgrind
 
 - callgrindとかcachegrindとか
-- 多分perfと同じ感じ？実装読みきれなかった…
+- LinuxではDWARFの情報読む
 - OSXでも動いてくれる
 
 ```console
@@ -105,6 +108,7 @@ $ cat trace.log
 
 - oproifle
     - 昔は割り込み式だったけど今はperfと同じかんじに動く
+    - 結果みるのがだるい…
 - Google CPU Profiler
     - C/C++向けのSampling Profiler
     - pprof(Go)とかstackprof(Ruby)とかに影響
