@@ -79,6 +79,7 @@ $ cat trace.log
 ### valgrind
 
 - callgrindとかcachegrindとか
+- 何回呼び出されるか、全体の割合でどのくらいかとか
 - LinuxではDWARFの情報読む
 - OSXでも動いてくれる
 
@@ -124,6 +125,8 @@ $ cat trace.log
 ### GC Configuration
 
 - 最近は実行時にGC向けのConfigを喰わせられるように
+
+http://dlang.org/spec/garbage.html
 
 ```
  $ ./gctuning "--DRT-gcopt=profile:2 minPoolSize:16"
@@ -182,10 +185,19 @@ extern(C) {
 
 ### GC
 
-http://dlang.org/spec/garbage.html
+[ガベージコレクション](http://www.kmonos.net/alang/d/garbage.html)
+
+> モダンなGCは、過去の遅いものより遙かに発展しています。 世代型のコピーGCには、 昔のマーク＆スイープアルゴリズムの非効率さはありません。
+> モダンなGCはヒープの詰め直しを行います。 これによってプログラムが活発に参照するページの数を減らし、 キャッシュヒット率を高め、 スワッップ回数が減ります。
+
+---
+
+#### そんなうまいはなしはなかった。。
 
 - Mark and Sweep / Stop The World
 - concurrentとかcopyingとかgenerationalとかない
+
+オリジナルから文言が消えてる! http://dlang.org/spec/garbage.html
 
 ---
 
