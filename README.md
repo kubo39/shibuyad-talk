@@ -211,7 +211,17 @@ extern(C) {
 
 ---
 
+#### できること
+
+- それほど思いつかない...
+- Out-of-Band GCはvibe.dには悪手
+    - 効果ない上に全体のスループットは劣化
+- jemalloc/tcmalloc試すとか？
+    - でもpoolの仕組みはすでにあるしな...
+
+---
+
 ### memcpy(3)
 
-- まあコピー減らすのは常套手段
+- コピー減らすのは常套手段
     - string連結とかしないでstd.array.appender使うとか
