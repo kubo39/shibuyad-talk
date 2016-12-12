@@ -221,6 +221,17 @@ extern(C) {
 
 ---
 
+#### Manual GC
+
+- GC Configで切り替え可能
+
+`$ ./gctuning "--DRT-gc:manual gcopt=profile:2 minPoolSize:16"`
+
+- 薄いインターフェースとメモリエラー処理だけ提供
+    - 自前で頑張る人向け
+
+---
+
 ### memcpy(3)
 
 - コピー減らすのは常套手段
