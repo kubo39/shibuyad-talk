@@ -2,8 +2,16 @@
 
 ---
 
+## benchamrk/Profiling/Optimization(a little)
+
+- D言語で速いコードを書くための準備
+
+---
+
 ## benchmark
 
+- 推測するな、計測せよ
+    - profilingのとこでも触れますが
 - benchmarkはエビデンス
     - 提案がほんとに効果あるかとか
     - パフォーマンスに影響があるorないの証明とか
@@ -37,6 +45,14 @@ $ shibuyad-talk% rdmd benchmark1.d
     - 勘とか、知識とかまあ悪くはないけど
         - 実は最適化してくれてるとかコードみただけでわかります？
         - けっきょくボトルネックじゃないかもしれない
+
+---
+
+### Tools
+
+- dmd -profile
+- perf
+- callgrind / cachegrind
 
 ---
 
@@ -76,10 +92,12 @@ $ cat trace.log
 
 ---
 
-### valgrind
+### callgrind/cachegrind
 
-- callgrindとかcachegrindとか
-- 何回呼び出されるか、全体の割合でどのくらいかとか
+- valgrind tool
+    - callgrind: callstack ratio
+        - 何回呼び出されるか、全体の割合でどのくらいかとか
+    - cachegrind: キャッシュ
 - LinuxではDWARFの情報読む
 - OSXでも動いてくれる
 
@@ -118,6 +136,17 @@ $ cat trace.log
 
 ---
 
+### 所感
+
+- profilerは得意・不得意なものがあったりする
+- 基本使いやすいさで選べば良い
+- ユースケースも考えよう
+    - 本番環境で計測をとることは大事
+- Visualizeもあるとなおよし
+    - flamegraph / kCacheGrind / etc...
+
+---
+
 ## Memory Profiling
 
 ---
@@ -128,8 +157,10 @@ $ cat trace.log
 
 http://dlang.org/spec/garbage.html
 
+- stats
+
 ```
- $ ./gctuning "--DRT-gcopt=profile:2 minPoolSize:16"
+ $ ./gctuning "--DRT-gcopt=profile:2"
         Number of collections:  5
         Total GC prep time:  0 milliseconds
         Total mark time:  1 milliseconds
@@ -176,9 +207,17 @@ extern(C) {
 
 ---
 
+### 所感
+
+- CPUに比べると軽視されがちだけど
+    - できればちゃんととっとく
+- Memory Leaksはvalgrindとか使おう
+
+---
+
 ## performance
 
-* GC
+* GC Tuning
 * memcpy(3)
 
 ---
@@ -212,7 +251,25 @@ extern(C) {
 
 ---
 
-#### できること
+#### GC Tuning parameters
+
+- 詳しいユースケースの解説はない
+    - 自分で試すしかない
+    - GC実装の知識を要求するのでよくないデザイン
+
+```
+initReserve:N - initial memory to reserve in MB
+minPoolSize:N - initial and minimum pool size in MB
+maxPoolSize:N - maximum pool size in MB
+incPoolSize:N - pool size increment MB
+heapSizeFactor:N - targeted heap size to used memory ratio
+```
+
+- 各自がんばってくれ…
+
+---
+
+#### そのほかできること
 
 - それほど思いつかない...
 - Out-of-Band GCはvibe.dには悪手
@@ -227,10 +284,11 @@ extern(C) {
 
 - GC Configで切り替え可能
 
-`$ ./gctuning "--DRT-gc:manual gcopt=profile:2 minPoolSize:16"`
+`$ ./gctuning "--DRT-gc:manual gcopt=profile:2"`
 
 - 薄いインターフェースとメモリエラー処理だけ提供
     - 自前で頑張る人向け
+    - 各自(ry
 
 ---
 
