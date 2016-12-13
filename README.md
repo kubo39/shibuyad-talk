@@ -206,8 +206,9 @@ extern(C) {
 - いわゆる保守的GC
     - ポインタっぽいやつだったらmarkしとこw
 - オブジェクトサイズによってPoolを用意
+    - SmallObjectPool / LargeObjectPool
     - デブは電車に乗るな
-    - Poolもまた何個かある
+    - 複数のPoolを配列で管理
 
 ---
 
@@ -218,6 +219,7 @@ extern(C) {
     - 効果ない上に全体のスループットは劣化
 - jemalloc/tcmalloc試すとか？
     - でもpoolの仕組みはすでにあるしな...
+    - LargeObjectPoolのfragmentには効果なさそう
 
 ---
 
