@@ -1,4 +1,4 @@
-# shibya.d 2
+# shibuya.d 2
 
 ---
 
