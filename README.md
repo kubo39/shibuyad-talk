@@ -245,7 +245,7 @@ extern(C) {
 - いわゆる保守的GC
     - ポインタっぽいやつだったらmarkしとこw
 - オブジェクトサイズによってPoolを用意
-    - SmallObjectPool / LargeObjectPool
+    - SmallObjectPool(<=2K) / LargeObjectPool(>2K)
     - デブは電車に乗るな
     - 複数のPoolを配列で管理
 
@@ -305,7 +305,7 @@ heapSizeFactor:N - targeted heap size to used memory ratio
     - GCのパラメータとか
     - 自前でGC組むとか
 - 基本は言語非依存な知識でいける
-    - まずアルゴリズムを見直す
+    - まずデータ構造・アルゴリズムを見直す
     - システムコール発行回数減らす
     - メモリコピーを減らす
     - キャッシュレイヤやページングを意識
