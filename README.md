@@ -245,7 +245,8 @@ extern(C) {
 - いわゆる保守的GC
     - ポインタっぽいやつだったらmarkしとこw
 - オブジェクトサイズによってPoolを用意
-    - SmallObjectPool(<=2K) / LargeObjectPool(>2K)
+    - SmallObjectPool(<=2Kのオブジェクト) / LargeObjectPool(>2K)
+        - Page単位になるように(ページサイズ=4K)
     - デブは電車に乗るな
     - 複数のPoolを配列で管理
 
